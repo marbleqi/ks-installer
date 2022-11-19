@@ -1,4 +1,4 @@
-name: 构建core镜像
+name: 拉取kubesphere官方镜像，并推送到私有仓库
 
 on:
   push:
@@ -9,12 +9,21 @@ jobs:
   build:
     runs-on: ubuntu-latest
     steps:
-    - name: 拉取官方KubeSphere镜像，并保存到私有仓库
+    - name: 拉取KubeSphere官方镜像，并推送到私有仓库
       run: |
-        docker pull kubesphere/ks-installer:v3.3.1
         docker login -u $DOCKER_USERNAME -p $DOCKER_PASSWORD registry.cn-beijing.aliyuncs.com
+        docker pull kubesphere/ks-installer:v3.3.1
         docker tag kubesphere/ks-installer:v3.3.1 registry.cn-beijing.aliyuncs.com/marbleqi/ks-installer:v3.3.1
         docker push registry.cn-beijing.aliyuncs.com/marbleqi/ks-installer:v3.3.1
+        docker pull kubesphere/ks-apiserver:v3.3.1
+        docker tag kubesphere/ks-apiserver:v3.3.1 registry.cn-beijing.aliyuncs.com/marbleqi/ks-apiserver:v3.3.1
+        docker push registry.cn-beijing.aliyuncs.com/marbleqi/ks-apiserver:v3.3.1
+        docker pull kubesphere/ks-console:v3.3.1
+        docker tag kubesphere/ks-console:v3.3.1 registry.cn-beijing.aliyuncs.com/marbleqi/ks-console:v3.3.1
+        docker push registry.cn-beijing.aliyuncs.com/marbleqi/ks-console:v3.3.1
+        docker pull kubesphere/ks-controller-manager:v3.3.1
+        docker tag kubesphere/ks-controller-manager:v3.3.1 registry.cn-beijing.aliyuncs.com/marbleqi/ks-controller-manager:v3.3.1
+        docker push registry.cn-beijing.aliyuncs.com/marbleqi/ks-controller-manager:v3.3.1
       env: 
         DOCKER_USERNAME: ${{ secrets.DOCKER_USERNAME }}
         DOCKER_PASSWORD: ${{ secrets.DOCKER_PASSWORD }}
