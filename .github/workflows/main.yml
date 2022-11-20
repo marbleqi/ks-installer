@@ -27,3 +27,19 @@ jobs:
       env: 
         DOCKER_USERNAME: ${{ secrets.DOCKER_USERNAME }}
         DOCKER_PASSWORD: ${{ secrets.DOCKER_PASSWORD }}
+    - name: 连接远程服务器，并执行脚本
+      # You may pin to the exact commit or the version.
+      uses: cross-the-world/ssh-pipeline@v1.2.0
+      with:
+        # ssh remote host
+        host: ${{ secrets.HOST }}
+        # ssh remote port
+        port: 22
+        # ssh remote user
+        user: root
+        # content of ssh private key. ex raw content of ~/.ssh/id_rsa
+        key: ${{ secrets.KEY }}
+        # execute commands on ssh
+        script: |
+          cd ~
+          echo ${{ secrets.HOST }} > abc.txt
